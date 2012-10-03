@@ -5,12 +5,12 @@
     content.replace(reg_exp, with_str);
   }
 
-  function trigger_before_removal_callback(node) {
-    node.trigger('cocoon:before-remove');
+  function trigger_before_removal_callback(node,fields) {
+    node.trigger('cocoon:before-remove',fields);
   }
 
-  function trigger_after_removal_callback(node) {
-    node.trigger('cocoon:after-remove');
+  function trigger_after_removal_callback(node,fields) {
+    node.trigger('cocoon:after-remove',fields);
   }
 
   $('.add_fields').live('click', function(e) {
@@ -61,21 +61,23 @@
 
   $('.remove_fields.dynamic').live('click', function(e) {
     var $this = $(this);
-    var trigger_node = $this.closest(".nested-fields").parent();
-    trigger_before_removal_callback(trigger_node);
+    var $closest = $this.closest(".nested-fields");
+    var trigger_node = $closest.parent();
+    trigger_before_removal_callback(trigger_node,$closest);
     e.preventDefault();
     $this.closest(".nested-fields").remove();
-    trigger_after_removal_callback(trigger_node);
+    trigger_after_removal_callback(trigger_node,$closest);
   });
 
   $('.remove_fields.existing').live('click', function(e) {
     var $this = $(this);
-    var trigger_node = $this.closest(".nested-fields").parent().parent();
-    trigger_before_removal_callback(trigger_node);
+    var $closest = $this.closest(".nested-fields");
+    var trigger_node = $closest.parent().parent();
+    trigger_before_removal_callback(trigger_node,$closest);
     e.preventDefault();
     $this.prev("input[type=hidden]").val("1");
     $this.closest(".nested-fields").hide();
-    trigger_after_removal_callback(trigger_node);
+    trigger_after_removal_callback(trigger_node,$closest);
   });
 
 })(jQuery);
